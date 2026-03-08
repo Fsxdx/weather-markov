@@ -3,6 +3,7 @@ import networkx as nx
 import seaborn as sns
 
 from weather_markov.markov.graph import TransitionGraph
+from weather_markov.markov.layered_graph import LayeredTransitionGraph
 
 
 def plot_transition_matrix(graph: TransitionGraph, title: str = "") -> None:
@@ -20,6 +21,24 @@ def plot_graph_network(graph: TransitionGraph, title: str = "") -> None:
         for ts, prob in graph.predict(fs).items():
             G.add_edge(fs, ts, weight=prob)
     pos = nx.spring_layout(G, seed=42)
+    edge_labels = {(u, v): f"{d['weight']:.2f}" for u, v, d in G.edges(data=True)}
+    nx.draw(G, pos, with_labels=True, node_color="lightblue", arrows=True)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+    plt.title(title)
+    plt.show()
+
+
+def plot_layer_graph_network(graph: LayeredTransitionGraph, title: str = "") -> None:
+    """Network visualisation of the transition graph via networkx"""
+    G = nx.DiGraph()
+    for num, layer in enumerate(graph.layers):
+        for state in layer:
+            G.add_node(state, layer=num)
+
+    for fs in graph.from_states:
+        for ts, prob in graph.predict(fs).items():
+            G.add_edge(fs, ts, weight=prob)
+    pos = nx.multipartite_layout(G, subset_key="layer")
     edge_labels = {(u, v): f"{d['weight']:.2f}" for u, v, d in G.edges(data=True)}
     nx.draw(G, pos, with_labels=True, node_color="lightblue", arrows=True)
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
