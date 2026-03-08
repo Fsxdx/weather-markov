@@ -42,9 +42,7 @@ class NonUniformMarkovChainPredictor(DecadeBasedPredictor):
             raise ValueError("start_label must be earlier than end_label")
 
         path = labels[start_idx : end_idx + 1]
-        self.transition_labels = [
-            (path[i], path[i + 1]) for i in range(len(path) - 1)
-        ]
+        self.transition_labels = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
         all_states = list(self.discretizer.labels)
         self.transition_matrices = [
             self._build_dense_probability_matrix(
@@ -69,7 +67,9 @@ class NonUniformMarkovChainPredictor(DecadeBasedPredictor):
 
         # If state was never observed as `from_state`, use uniform row.
         uniform_row = pd.Series(1.0 / len(all_states), index=all_states)
-        probs = probs.apply(lambda row: uniform_row if row.isna().all() else row, axis=1)
+        probs = probs.apply(
+            lambda row: uniform_row if row.isna().all() else row, axis=1
+        )
         return probs.fillna(0.0)
 
     def predict(self, state: str) -> dict[str, float]:
