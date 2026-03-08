@@ -1,0 +1,14 @@
+name: Black Code Style
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Black check
+        uses: psf/black@stable
+        with:
+          src: "."
+          jupyter: true
