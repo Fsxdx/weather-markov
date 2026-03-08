@@ -20,7 +20,6 @@ class LayeredTransitionGraph(TransitionGraph):
         super().__init__()
         self._layers = list()
 
-
     # --- Building ---
     def add_layer(self, states: list[str]) -> None:
         self._layers.append(states)
@@ -29,7 +28,9 @@ class LayeredTransitionGraph(TransitionGraph):
         self._layers.extend(layers)
 
     @classmethod
-    def from_pairs(cls, pairs: list[tuple[str, str]], layers: list[list[str]]) -> "LayeredTransitionGraph":
+    def from_pairs(
+        cls, pairs: list[tuple[str, str]], layers: list[list[str]]
+    ) -> "LayeredTransitionGraph":
         g = cls()
         g.add_transitions_from(pairs)
         g.add_layers(layers)

@@ -27,6 +27,7 @@ def plot_graph_network(graph: TransitionGraph, title: str = "") -> None:
     plt.title(title)
     plt.show()
 
+
 def plot_layer_graph_network(graph: LayeredTransitionGraph, title: str = "") -> None:
     """Network visualisation of the transition graph via networkx"""
     G = nx.DiGraph()

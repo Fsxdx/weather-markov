@@ -50,7 +50,9 @@ class TwoLayerGraphMarkovPredictor(DecadeBasedPredictor):
             ].set_index("year")["avg_temperature"]
 
             common_years = from_data.index.intersection(to_data.index)
-            from_states = f"{from_m}" + self.discretizer.transform(from_data[common_years])
+            from_states = f"{from_m}" + self.discretizer.transform(
+                from_data[common_years]
+            )
             to_states = f"{to_m}" + self.discretizer.transform(to_data[common_years])
 
             layers.append(from_states.to_list())
@@ -59,7 +61,6 @@ class TwoLayerGraphMarkovPredictor(DecadeBasedPredictor):
             pairs_per_transition[(from_label, to_label)] = list(
                 zip(from_states, to_states)
             )
-
 
         return pairs_per_transition, layers
 
